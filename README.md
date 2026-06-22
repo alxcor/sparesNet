@@ -12,7 +12,7 @@ Web Page: [alxcor.github.io/sparesnet](https://alxcor.github.io/sparesnet)
 
 ## Interface Overview
 
-![SparesNet Main Interface](doc/images/interface.png)
+![SparesNet Main Interface](docs/images/interface.png)
 
 - **Clear All**: Wipe either the entire spreadsheet dataset
 - **Clear Data**: Delete data cells content while retaining original codes (first column).
