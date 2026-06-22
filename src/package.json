@@ -1,0 +1,46 @@
+{
+  "name": "SparesNet",
+  "version": "26.06.20",
+  "description": "Check spare parts availability",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite build && electron .",
+    "build": "vite build && electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^40.0.0",
+    "electron-builder": "^26.4.0",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "jspreadsheet-ce": "^5.0.4",
+    "puppeteer-core": "^24.36.0",
+    "puppeteer-in-electron": "^3.0.5",
+    "xlsx": "^0.18.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "build": {
+    "appId": "com.alxcor.sparesnet",
+    "productName": "SparesNet",
+    "directories": {
+      "output": "dist-portable"
+    },
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "preload.cjs",
+      "package.json",
+      "images/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "public/images/sparesnet.ico"
+    },
+    "asar": true
+  }
+}

@@ -1,0 +1,270 @@
+/* --- Core UI Tokens & Themes --- */
+:root {
+  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Light Theme Defaults */
+  --bg-app: #f5f6f8;
+  --bg-surface: #ffffff;
+  --bg-toolbar: #eef1f5;
+  --text-main: #202124;
+  --text-muted: #5f6368;
+  --border-color: #dadce0;
+  --accent-color: #1a73e8;
+  --hover-color: rgba(0, 0, 0, 0.06);
+  --table-color: #000000;
+  --table-bgcol: #ffffff;
+}
+
+/* Dark Theme Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-app: #121212;
+    --bg-surface: #1e1e1e;
+    --bg-toolbar: #2d2d2d;
+    --text-main: #e3e3e3;
+    --text-muted: #9aa0a6;
+    --border-color: #3c4043;
+    --accent-color: #8ab4f8;
+    --hover-color: rgba(255, 255, 255, 0.1);
+    --table-color: #000000;
+    --table-bgcol: #ffffff;
+  }
+}
+
+/* Dark Theme Fallback */
+body.dark {
+  --bg-app: #121212;
+  --bg-surface: #1e1e1e;
+  --bg-toolbar: #2d2d2d;
+  --text-main: #e3e3e3;
+  --text-muted: #9aa0a6;
+  --border-color: #3c4043;
+  --accent-color: #8ab4f8;
+  --hover-color: rgba(255, 255, 255, 0.1);
+  --table-color: #000000;
+  --table-bgcol: #ffffff;
+}
+
+/* --- Layout Reset --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-stack);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* --- Header Styling --- */
+.app-header {
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.logo-main {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.logo-sub {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.version-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--hover-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* --- Toolbar Styling --- */
+.toolbar {
+  background-color: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 4px 12px;
+  gap: 4px;
+  overflow: visible;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 2px;
+}
+
+.toolbar button {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.toolbar button:hover {
+  background-color: var(--hover-color);
+}
+
+.toolbar button img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.toolbar .divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color);
+  margin: 0 6px;
+}
+
+/* --- Workspace Layout --- */
+.workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px;
+  gap: 12px;
+}
+
+/* Status & Processing Elements */
+.status-banner {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-text-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+progress {
+  width: 100%;
+  height: 6px;
+  border: none;
+  border-radius: 3px;
+  overflow: hidden;
+  appearance: none;
+}
+
+progress::-webkit-progress-bar {
+  background-color: var(--border-color);
+}
+
+progress::-webkit-progress-value {
+  background-color: var(--accent-color);
+}
+
+/* Dynamic Data Grid Box */
+.table-container {
+  flex: 1;
+  /* background-color: var(--bg-surface); */
+  background-color: var(--table-bgcol);
+  color: var(--table-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: auto;
+}
+
+/* --- Footer Frame --- */
+.app-footer {
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  padding: 6px 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* --- Clean Native CSS Tooltips --- */
+
+.floating-tooltip {
+  position: fixed;
+  transform: translateX(-50%) scale(0.95);
+  background: #212121;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease, transform .12s ease;
+  z-index: 10000;
+}
+.floating-tooltip.visible {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.tooltip {
+  position: relative;
+  /* display: inline-flex; */
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+  transform-origin: top center;
+  background-color: #212121;
+  color: #ffffff;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 9999;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}

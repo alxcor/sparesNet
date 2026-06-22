@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Spare Parts">
+    <meta name="description" content="Portable app for spare parts availability evaluation">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>SparesNet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="header-title-group">
+            <h1 class="logo-main">Check MLFB</h1>
+        <h2 class="logo-sub">spare parts</h2>
+        </div>
+        <div class="version-badge">v26.06.20; Jun.2026</div>
+    </header>
+    <!-- Toolbar / Menu -->
+    <nav class="toolbar">
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Toggle Light/Dark Theme">
+                <button id="bt_dark_mode">
+                    <img src="images/i_dark_mod.png" alt="Theme">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Clear All">
+                <button id="clear_all">
+                    <img src="images/d_clear_all.png" alt="Clear All">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Clear Row Data">
+                <button id="clear_row">
+                    <img src="images/d_clear_row.png" alt="Clear Row">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Import from Excel">
+                <button id="import_xls">
+                    <img src="images/d_xls_imp.png" alt="Import">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Export to Excel">
+                <button id="export_xls">
+                    <img src="images/d_xls_exp.png" alt="Export">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Read All, including successors">
+                <button id="report_wiz">
+                    <img src="images/d_rep_wiz.png" alt="Wizard">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Sort by MLFB Code">
+                <button id="sort_cod">
+                    <img src="images/m_sort_cod.png" alt="Sort Code">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Sort by selected Column">
+                <button id="sort_col">
+                    <img src="images/m_sort_col.png" alt="Sort Col">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Read Row">
+                <button id="read_row">
+                    <img src="images/r_read_row.png" alt="Read Row">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Read All">
+                <button id="read_all">
+                    <img src="images/r_read_all.png" alt="Read All">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Successor for Row">
+                <button id="succ_row">
+                    <img src="images/r_succ_row.png" alt="Succ Row">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Successor for All">
+                <button id="succ_all">
+                    <img src="images/r_succ_all.png" alt="Succ All">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+            <div class="tooltip" data-tooltip="Preview Report">
+                <button id="report_set">
+                    <img src="images/d_rep_prt.png" alt="Preview">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Export Report to HTML">
+                <button id="report_htm">
+                    <img src="images/d_rep_htm.png" alt="HTML">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Export Report to PDF">
+                <button id="report_pdf">
+                    <img src="images/d_rep_pdf.png" alt="PDF">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Spares On Web">
+                <button id="int_sow">
+                    <img src="images/w_int_sow.png" alt="SOW">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Industry Mall">
+                <button id="int_mall">
+                    <img src="images/w_int_mall.png" alt="Mall">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="SIOS">
+                <button id="int_sios">
+                    <img src="images/w_int_sios.png" alt="SIOS">
+                </button>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <div class="tooltip" data-tooltip="Open Web Page">
+                <button id="web_web">
+                    <img src="images/w_web_web.png" alt="web">
+                </button>
+            </div>
+            <div class="tooltip" data-tooltip="Open GitHub">
+                <button id="web_github">
+                    <img src="images/w_web_github.png" alt="GitHub">
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+        <!-- Action / Progress Status Area -->
+        <div class="status-banner">
+            <div class="status-text-row">
+                <span id="row_number">Rows: 0</span>
+                <span id="progress_text">Ready</span>
+            </div>
+            <progress id="progress_bar" value="0" max="100"></progress>
+        </div>
+
+    <!-- Data Display Table Container -->
+    <div class="table-container" id="table_container">
+      <!-- Data tables injected here dynamically -->
+    </div>
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <span>...</span>
+    <span>alxcor@yahoo.com</span>
+  </footer>
+
+  <script type="module" src="renderer.js"></script>
+</body>
+</html>
