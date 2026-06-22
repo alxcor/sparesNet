@@ -1,6 +1,6 @@
 # SparesNet
 
-![SparesNet Banner](images/header.png)
+![SparesNet Banner](docs/images/header.png)
 
 > **SparesNet** is a portable desktop application designed to evaluate the life-cycle status and availability of Siemens Industry automation products using their part numbers (MLFB).
 
@@ -12,7 +12,7 @@ Web Page: [alxcor.github.io/sparesnet](https://alxcor.github.io/sparesnet)
 
 ## Interface Overview
 
-![SparesNet Main Interface](images/sparesnet_workspace.png)
+![SparesNet Main Interface](doc/images/interface.png)
 
 - **Clear All**: Wipe either the entire spreadsheet dataset
 - **Clear Data**: Delete data cells content while retaining original codes (first column).
