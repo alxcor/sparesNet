@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Spare parts, MLFB, IndustryMall, Web Scraper, Evaluare piese de schimb, Totally Integrated Automation, Puppeteer">
+    <meta name="description" content="Aplicatie NodeJS pentru verificare disponibilitate piese de schimb dupa codul MLFB">
+    <title>SparesNet</title>
+    <style>
+    :root {
+        --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --bg-app: #f5f6f8;
+        --bg-surface: #ffffff;
+        --bg-header:  #ffffff;
+        --bg-toolbar: #303050;
+        --bk-toolbar: linear-gradient(to left, #00000F, #505070);
+        --text-main: #202124;
+        --text-muted: #5f6368;
+        --text-toolbar: #e3e3e3;
+        --border-color: #dadce0;
+        --accent-color: #1a73e8;
+        --hover-color: rgba(255, 255, 255, 0.15);
+        --table-color: #000000;
+        --table-bgcol: #ffffff;
+    }
+    body.dark {
+        --bg-app: #121212;
+        --bg-surface: #1e1e1e;
+        --bg-header:  #1e1e1e;
+        --text-main: #e3e3e3;
+        --text-muted: #9aa0a6;
+        --border-color: #3c4043;
+        --accent-color: #8ab4f8;
+        --table-color: #ffffff;
+        --table-bgcol: #1e1e1e;
+    }
+    @media (prefers-color-scheme: dark) {
+        body:not(.light) {
+            --bg-app: #121212;
+            --bg-surface: #1e1e1e;
+            --bg-header:  #1e1e1e;
+            --text-main: #e3e3e3;
+            --text-muted: #9aa0a6;
+            --border-color: #3c4043;
+            --accent-color: #8ab4f8;
+            --table-color: #ffffff;
+            --table-bgcol: #1e1e1e;
+        }
+    }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        font-family: var(--font-stack);
+        background-color: var(--bg-app);
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    a {
+        color: var(--accent-color);
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    .app-header {
+        background-color: var(--bg-header);
+        border-bottom: 1px solid var(--border-color);
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header-title-group {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+    }
+    .logo-main {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent-color);
+    }
+    .logo-sub {
+        font-size: 1.3rem;
+        font-weight: 400;
+        color: var(--text-muted);
+    }
+    .version-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        padding: 4px 8px;
+        background: var(--hover-color);
+        border-radius: 4px;
+    }
+    .toolbar {
+        background: var(--bk-toolbar);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 6px 16px;
+        gap: 6px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .toolbar-group {
+        display: flex;
+        gap: 4px;
+    }
+    .toolbar button {
+        background: transparent;
+        border: none;
+        border-radius: 4px;
+        color: var(--text-toolbar);
+        min-width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        padding: 4px 10px;
+        font-size: 0.9rem;
+    }
+    .toolbar button:hover {
+        background-color: var(--hover-color);
+    }
+    .toolbar button img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+        pointer-events: none;
+    }
+    .toolbar .divider {
+        width: 1px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin: 0 4px;
+    }
+    .tooltip {
+        position: relative;
+    }
+    .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: 125%;
+        left: 50%;
+        transform: translateX(-50%) scale(0.85);
+        transform-origin: top center;
+        background-color: #212121;
+        color: #ffffff;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        transition: opacity 0.15s ease, transform 0.15s ease;
+        z-index: 9999;
+    }
+    .tooltip:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+    .hero-banner {
+        background: url("images/header.png") no-repeat top center;
+        background-size: cover;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        padding: 2rem;
+    }
+    .hero-text-box {
+        background-color: rgba(0, 0, 0, 0.65); 
+        padding: 1rem 2.5rem; 
+        border-radius: 2px; 
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    }
+    .hero-text-box h1 {
+        color: #ffffff;
+        font-size: 2.5rem;
+        margin: 0;
+    }
+    .main-content {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        flex: 1;
+    }
+    .card {
+        background-color: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card h2 {
+        margin-bottom: 1rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-top: 1.5rem;
+        padding-bottom: 0.5rem;
+        color: var(--accent-color);
+    }
+    .card p {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 1rem;
+    }
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem;
+        color: #FFFFFF;
+        background-color: #40404F;
+        border-radius: 0.25rem;
+        display: inline-block;
+        transition: background-color 0.2s;
+    }
+    .btn:hover {
+        background-color: var(--accent-color);
+        text-decoration: none;
+    }
+    .media-block {
+        margin: 1.5rem 0;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+    .media-block img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .feature-list {
+        list-style-type: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    .feature-list li {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+    .footer {
+        background-color: var(--bg-surface);
+        border-top: 1px solid var(--border-color);
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: auto;
+    }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-title-group">
+            <h1 class="logo-main">NodeJS / Puppeteer</h1>
+            <h2 class="logo-sub">web scraper</h2>
+        </div>
+        <div class="version-badge">v26.06.20; Iun.2026</div>
+    </header>
+    <nav class="toolbar">
+        <div class="toolbar-group">
+            <button id="bt_home" class="tooltip" data-tooltip="Acasa">
+                <img src="images/ico_home.png" alt="Acasa">
+            </button>
+            <button id="bt_lang" class="tooltip" data-tooltip="Language">
+                <img src="images/ico_lang.png" alt="Language">
+            </button>
+            <button id="bt_dark" class="tooltip" data-tooltip=" Fundal">
+                <img src="images/ico_dark.png" alt="Tema">
+            </button>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <button id="bt_github" class="tooltip" data-tooltip="Cod sursa pe GitHub">Cod sursa</button>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar-group">
+            <button id="nav_interface">Interfata</button>
+            <button id="nav_guide">Ghid</button>
+            <button id="nav_report">Raport</button>
+        </div>
+    </nav>
+    <section class="hero-banner">
+        <div class="hero-text-box">
+            <h1>NodeJS + Puppeteer</h1>
+        </div>
+    </section>
+    <main class="main-content">
+        <section class="card">
+            <p><strong>SparesNet</strong> este o aplicatie portabila, scrisa in NodeJS, pentru evaluarea stadiului ciclului de viață și disponibilitatii produselor de automatizare Siemens Industry pe baza codurilor de produs (MLFB).</p>
+            <p>Inspirata de mai vechiul utilitar Excel bazat pe macro VB (<code>SparesWeb.xls</code>, nefunctional pe noul Sieportal), <strong>SparesNet</strong> ofera o interfata moderna bazata pe Electron/Vite/Puppeteer si tabele compatibile Excel.</p>
+            <div class="btn-group">
+                <a href="http://github.com/alxcor/sparesnet" target="_blank" class="btn">Cod sursa GitHub</a>
+                <a href="https://github.com/alxcor/sparesNet/releases/download/v26.06.20/SparesNet.26.6.20.zip" class="btn">Download v26.06.20</a>
+            </div>
+        </section>
+        <section class="card" id="interface-section">
+            <h2>Interface Description</h2>
+            <div class="media-block">
+                <img alt="Interface screenshot" src="images/interface.png">
+            </div>
+            <ul class="feature-list">
+                <li><strong>Clear All:</strong> Stergere a tuturor datelor din tabel.</li>
+                <li><strong>Clear Data:</strong> Stergere a datelor din tabel, cu exceptia codurilor de comanda (prima coloana).</li>
+                <li><strong>Import from Excel:</strong> Import date dintr-un fisier Excel existent (doar din sheet 'Data', daca exista, sau din primul sheet daca nu).</li>
+                <li><strong>Export to Excel:</strong> Export date intr-un nou fisier Excel.</li>
+                <li><strong>Read All with successors (Wizard):</strong> Sortare date dupa cod MLFB, citire date pentru toate randurile, verificare disponibilitate si extragere date pentru succesori, generare si afisare a unui raport.</li>
+                <li><strong>Sort by MLFB:</strong> Sortare randuri dupa cod MLFB.</li>
+                <li><strong>Sort by Column:</strong> Sortare date dupa coloana selectata.</li>
+                <li><strong>Read Row:</strong> Citire date de pe internet doar pentru randul selectat.</li>
+                <li><strong>Read All:</strong> Citire date pentru toate randurile (fara verificare succesori).</li>
+                <li><strong>Successor for Row:</strong> Verificare a disponibilitatii unui succesor pentru codul de pe randul actual, inserare in tabel, daca nu exista deja si actualizare date pentru acesta.</li>
+                <li><strong>Successor for All:</strong> Verificare a disponibilitatii succesorilor pentru toate codurile, inserare in tabel, daca nu exista deja si actualizare date pentru noile coduri.</li>
+                <li><strong>Preview report:</strong> Generare si afisare a unui raport HTML pentru datele din tabel.</li>
+                <li><strong>Export report to HTML:</strong> Generare si salvare a unui raport HTML pentru datele din tabel.</li>
+                <li><strong>Export report to PDF:</strong> Generare si salvare a unui raport PDF pentru datele din tabel.</li>
+                <li><strong>Spares On Web:</strong> Link rapid la pagina <strong>Siemens Spares on Web (SOW)</strong> corespunzatoare codului de pe randul actual.</li>
+                <li><strong>Industry Mall:</strong> Link rapid la pagina <strong>Industry Mall</strong> corespunzatoare codului de pe randul actual</strong>.</li>
+                <li><strong>SIOS:</strong> Link rapid la pagina <strong>Siemens Industry Support (SIOS)</strong> corespunzatoare codului de pe randul actual.</li>
+            </ul>
+        </section>
+        <section class="card" id="guide-section">
+            <h2>Ghid rapid de utilizare</h2>
+            <p>Completati in prima coloana codurile MLFB (codurile de comanda) corespunzatoare pieselor pentru care doriti informatii. Codurile pot fi completate manual, cu Copy-Paste dintr-un tabel Excel sau LibreOffice-Calc existent sau importate dintr-un fisier Excel existent.</p>
+            <p>Dupa completarea primei coloane cu codurile dorite, dati click pe <strong>Read All with successors (Wizard)</strong>. Aplicatia va sorta codurile, descarca datele de pe paginine web corespunzatoare, identifica eventualele coduri pentru produsele declarate succesoare ale produselor din lista, descarca date si pentru acestea apoi va genera si afisa un raport referitor la disponibilitatea pieselor.</p>
+        </section>
+        <section class="card" id="report-section">
+            <h2>Raport</h2>
+            <p>Aplicatia poate genera un raport, in format HTML sau PDF, cu o vedere generala rapida a procentului de piese aflate in fiecare etapa de viata. Mai mult, ofera si un indicator visual al disponibilitatii succesorilor si a timpului scurs de la scoaterea din fabricatie a celei mai vechi piese.</p>
+            <div class="media-block">
+                <img alt="Application analytical report representation" src="images/report.png">
+            </div>
+            <div class="btn-group">
+                <a href="http://github.com/alxcor/sparesnet" target="_blank" class="btn">Cod sursa GitHub</a>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <span>SparesNet</span>
+        <span>alxcor@yahoo.com</span>
+    </footer>
+    <script>
+        document.getElementById('bt_home').addEventListener('click', () => {
+            window.location.href = 'http://alxcor.github.io/index_ro.html';
+        });
+        document.getElementById('bt_lang').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+        document.getElementById('bt_github').addEventListener('click', () => {
+            window.open('http://github.com/alxcor/sparesnet', '_blank');
+        });
+        document.getElementById('nav_interface').addEventListener('click', () => {
+            document.getElementById('interface-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        document.getElementById('nav_guide').addEventListener('click', () => {
+            document.getElementById('guide-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        document.getElementById('nav_report').addEventListener('click', () => {
+            document.getElementById('report-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        document.getElementById('bt_dark').addEventListener('click', () => {
+            const hasDarkClass = document.body.classList.contains('dark');
+            const hasLightClass = document.body.classList.contains('light');
+            const isDarkModeNow = hasDarkClass || (!hasLightClass && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDarkModeNow) {
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+            } else {
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+            }
+        });
+    </script>
+</body>
+</html>
