@@ -6,7 +6,7 @@
 
 Starting from the older macro-enabled Excel solutions (`SparesWeb.xls`, no longer operational), **SparesNet** provides a modern standalone interface powered by Electron/Vite/Puppeteer and dynamic spreadsheets.
 
-Web Page: [alxcor.github.io/sparesnet](https://alxcor.github.io/sparesnet)
+Web Page: [alxcor.github.io/sparesnet](https://alxcor.github.io/sparesNet)
 
 ---
 
