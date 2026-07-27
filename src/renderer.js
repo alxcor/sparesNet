@@ -546,7 +546,7 @@ document.getElementById('int_sios').onclick = () => {
 
 // Buttons: Open Web Page Help
 document.getElementById('web_web').onclick = () => {
-    window.api.openExternal('https://alxcor.github.io/sparesnet/');
+    window.api.openExternal('https://alxcor.github.io/sparesNet/');
 };
 
 // Buttons: Open Github for Project
