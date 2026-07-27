@@ -9,6 +9,8 @@ Starting from the older macro-enabled Excel solutions (`SparesWeb.xls`, no longe
 Web Page: [alxcor.github.io/sparesnet](https://alxcor.github.io/sparesNet)
 
 ---
+## Download
+For a working, portable, version, download SparesNet Version.zip from Releases, unzip and run the exe.
 
 ## Interface Overview
 
